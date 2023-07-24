@@ -31,16 +31,16 @@ public class Main {
                 new Item(3, "C"),
                 new Item(3, "C"),
                 new Item(1, "A"));
-        Set<Item> uniqueItems = getUniqueItemsSortedSet(items1,items2, Locale.GERMAN);
+        Set<Item> uniqueItems = getUniqueSortedItems(items1,items2, Locale.GERMAN);
         printCollection(uniqueItems);
     }
 
-    private static Set<Item> getUniqueItemsSortedSet(List<Item> list1, List<Item> list2, Locale locale) {
+    private static Set<Item> getUniqueSortedItems(List<Item> list1, List<Item> list2, Locale locale) {
         Collator localeCollector = Collator.getInstance(locale);
         Set<Item> uniqueItems = list1.stream()
                 .filter(list2::contains)
                 .sorted(Comparator.comparing(Item::getTitle,localeCollector))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
         return uniqueItems;
     }
 
