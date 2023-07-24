@@ -8,7 +8,6 @@ package collections;
 
 import java.text.Collator;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,22 +30,15 @@ public class Main {
                 new Item(3, "C"),
                 new Item(3, "C"),
                 new Item(1, "A"));
-        Set<Item> uniqueItems = getUniqueSortedItems(items1,items2, Locale.GERMAN);
-        printCollection(uniqueItems);
+        printCommonSortedItems(items1,items2, Locale.GERMAN);
     }
 
-    private static Set<Item> getUniqueSortedItems(List<Item> list1, List<Item> list2, Locale locale) {
+    private static void printCommonSortedItems(List<Item> list1, List<Item> list2, Locale locale) {
         Collator localeCollector = Collator.getInstance(locale);
-        Set<Item> uniqueItems = list1.stream()
-                .filter(list2::contains)
+        Set<Item> common = new LinkedHashSet<>(list1);
+        common.retainAll(list2);
+        common.stream()
                 .sorted(Comparator.comparing(Item::getTitle,localeCollector))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-        return uniqueItems;
-    }
-
-    private static void printCollection(Collection<Item> items){
-        for (Item item : items) {
-            System.out.println(item);
-        }
+                .forEach(System.out::println);
     }
 }
